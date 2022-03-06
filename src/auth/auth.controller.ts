@@ -14,7 +14,8 @@ export class AuthController {
 
     @Post("new")
     async createNewAccount(@Body() body: CreateUserDTO) {
-        return plainToClass(UserSerializer, await (await this.authService.createNewUser(body)).toJSON())
+        console.log("OK")
+        return this.authService.createNewUser(body)
     }
 
     @Post("login")

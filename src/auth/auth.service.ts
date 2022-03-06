@@ -15,15 +15,22 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async createNewUser({ email, fullName, password, username }: CreateUserDTO) {
-        const isUserExist = await this.UserModel.findOne({ $or: [{ email }, { username }] })
-        if (isUserExist) {
-            throw new BadRequestException("This email/username is already in use.")
+    async createNewUser({ email, fullName, password, username, accountType }: CreateUserDTO) {
+        const isEmailExist = await this.UserModel.findOne({ email })
+        const isUsernameExist = await this.UserModel.findOne({ username })
+        if (isEmailExist) {
+            throw new BadRequestException("This email is already in use.")
+        }
+
+        if (isUsernameExist) {
+            throw new BadRequestException("Username is already taken.")
         }
         const hashedPassword = await hash(password, 10)
-        const user = new this.UserModel({ email, fullName, password: hashedPassword, username });
+        const user = new this.UserModel({ email, fullName, password: hashedPassword, username, accountType });
         await user.save();
-        return user
+        return {
+            message: "Your account has been created Successfully!"
+        }
     }
 
     async login({ email, password }: LoginDTO) {
