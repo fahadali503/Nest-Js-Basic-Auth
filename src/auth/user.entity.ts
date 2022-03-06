@@ -13,6 +13,9 @@ export class User {
     @prop({ type: String, unique: true })
     email: string;
 
+    @prop({ type: String, enum: ['User', 'Business'] })
+    accountType: string;
+
     @Exclude()
     @prop({ type: String })
     password: string

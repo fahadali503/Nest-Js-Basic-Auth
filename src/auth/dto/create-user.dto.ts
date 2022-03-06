@@ -14,4 +14,7 @@ export class CreateUserDTO {
     @MinLength(5)
     @IsString()
     password: string;
+
+    @IsString()
+    accountType: string
 }
